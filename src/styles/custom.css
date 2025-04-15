@@ -1,0 +1,10 @@
+:root[data-theme="dark"] {
+
+    /* 针对侧边栏二级标题 */
+    .sl-nav-group .sl-nav-group>.sl-nav-item>a {
+        color: #ff0000;
+        /* 灰色字体 */
+        font-weight: normal;
+        /* 取消加粗 */
+    }
+}

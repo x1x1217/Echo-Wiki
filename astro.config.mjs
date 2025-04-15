@@ -12,12 +12,12 @@ export default defineConfig({
                 // 重写默认的 `SocialIcons` 组件。
                 Footer: './src/components/Footer.astro',
             },
-            title: 'EchoWiki', // 左上角标题
+            title: 'Echo-Wiki', // 左上角标题
             social: {
-                github: 'https://github.com/CS-BAOYAN/CS-BAOYAN-2025', // 右上角github仓库
+                github: 'https://github.com/x1x1217/Echo-Wiki', // 右上角github仓库
             },
             editLink: {
-                baseUrl: 'https://github.com/CS-BAOYAN/CS-BAOYAN-2025/edit/main/',
+                baseUrl: 'https://github.com/x1x1217/Echo-Wiki/edit/main/',
             },
             logo: {
                 src: './src/assets/KUCHA.png',
@@ -43,21 +43,6 @@ export default defineConfig({
                     ],
                 },
                 {
-                    label: '保研经验贴',
-                    items: [
-                        { label: '总览', slug: '保研经验贴/总览' },
-                        { label: '学校相关', slug: '保研经验贴/学校相关' },
-                        { label: '2024年保研总结贴', slug: '保研经验贴/2024年' },
-                        { label: '2023年保研总结贴', slug: '保研经验贴/2023年' },
-                        { label: '2022年保研总结贴', slug: '保研经验贴/2022年' },
-                        { label: '2021年保研总结贴', slug: '保研经验贴/2021年' },
-                        { label: '2020年保研总结贴', slug: '保研经验贴/2020年' },
-                        { label: '2019年保研总结贴', slug: '保研经验贴/2019年' },
-                        { label: '2018年保研总结贴', slug: '保研经验贴/2018年' },
-                        { label: '2017年保研总结贴', slug: '保研经验贴/2017年' },
-                    ],
-                },
-                {
                     label: '保研指南',
                     items: [
                         { label: '基础概念', slug: '保研指南/基础概念' },
@@ -66,21 +51,40 @@ export default defineConfig({
                         { label: '素养掌握', slug: '保研指南/素养掌握' },
                         { label: '科研二三事', slug: '保研指南/科研二三事' },
                         { label: '院校解析', slug: '保研指南/院校解析' },
+                        {
+                            label: '保研经验贴',
+                            items: [
+                                { label: '总览', slug: '保研经验贴/总览' },
+                                { label: '学校相关', slug: '保研经验贴/学校相关' },
+                                { label: '2024年保研总结贴', slug: '保研经验贴/2024年' },
+                                { label: '2023年保研总结贴', slug: '保研经验贴/2023年' },
+                                { label: '2022年保研总结贴', slug: '保研经验贴/2022年' },
+                                { label: '2021年保研总结贴', slug: '保研经验贴/2021年' },
+                                { label: '2020年保研总结贴', slug: '保研经验贴/2020年' },
+                                { label: '2019年保研总结贴', slug: '保研经验贴/2019年' },
+                                { label: '2018年保研总结贴', slug: '保研经验贴/2018年' },
+                                { label: '2017年保研总结贴', slug: '保研经验贴/2017年' },
+                            ],
+                        },
+                        { label: '保研工具箱', autogenerate: { directory: '保研工具箱' }, },
+                        { label: '信息汇总', autogenerate: { directory: '信息汇总' }, },
                     ],
                 },
                 {
-                    label: '导师招生广告',
-                    autogenerate: { directory: '导师招生广告' },
-                },
-                {
-                    label: '保研工具箱',
-                    autogenerate: { directory: '保研工具箱' },
-                },
-                {
-                    label: '信息汇总',
-                    autogenerate: { directory: '信息汇总' },
+                    label: '考研指南',
+                    items: [
+                        {
+                            label: '考研经验贴',
+                            items: [
+                                { label: '总览', slug: '考研指南/考研经验贴/总览' },
+                            ]
+                        },
+                    ]
                 },
             ],
+            // customCss: [
+            //     './src/styles/custom.css', 
+            // ],
         }),
     ],
 });
