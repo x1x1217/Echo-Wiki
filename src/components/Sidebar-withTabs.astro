@@ -1,0 +1,190 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+import Default from "@astrojs/starlight/components/Sidebar.astro";
+import { Image } from "astro:assets";
+
+const { sidebar } = Astro.props;
+---
+
+<div class="sl-sidebar-nav">
+    <div class="nav-tabs">
+        <button class="tab-button active" data-tab="Icon_Rocket">
+            <span class="icon">
+                <Image
+                    src={import("../assets/Icons/Icon_Rocket_Blue.svg")}
+                    alt="开始图标"
+                />
+            </span>
+            <span>写在前面</span>
+        </button>
+        <button class="tab-button" data-tab="Icon_Book">
+            <span class="icon">
+                <Image
+                    src={import("../assets/Icons/Icon_Book_Gray.svg")}
+                    alt="保研图标"
+                />
+            </span>
+            <span>保研</span>
+        </button>
+        <button class="tab-button" data-tab="Icon_Hat">
+            <span class="icon">
+                <Image
+                    src={import("../assets/Icons/Icon_Hat_Gray.svg")}
+                    alt="考研图标"
+                />
+            </span>
+            <span>考研</span>
+        </button>
+        <button class="tab-button" data-tab="Icon_People">
+            <span class="icon">
+                <Image
+                    src={import("../assets/Icons/Icon_People_Gray.svg")}
+                    alt="考公图标"
+                />
+            </span>
+            <span>考公</span>
+        </button>
+        <button class="tab-button" data-tab="Icon_Plane">
+            <span class="icon">
+                <Image
+                    src={import("../assets/Icons/Icon_Plane_Gray.svg")}
+                    alt="出国图标"
+                />
+            </span>
+            <span>出国</span>
+        </button>
+        <button class="tab-button" data-tab="Icon_Work">
+            <span class="icon">
+                <Image
+                    src={import("../assets/Icons/Icon_Work_Gray.svg")}
+                    alt="就业图标"
+                />
+            </span>
+            <span>就业</span>
+        </button>
+    </div>
+    <Default {...Astro.props} />
+</div>
+
+<style>
+    .nav-tabs {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 0.3rem;
+        border-bottom: 1px solid var(--sl-color-gray-5);
+        border: 1.5px solid var(--sl-color-gray-5);
+        border-radius: 0.75rem;
+        background-color: black;
+        margin-bottom: 1.5rem;
+    }
+
+    .tab-button {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: none;
+        color: var(--sl-color-gray-2);
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.2s;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: border 0.2s;
+        display: flex;
+        gap: 0.7rem;
+    }
+
+    .icon {
+        display: flex;
+        align-items: center;
+    }
+
+    .tab-button:hover {
+        background: #23262f;
+        color: var(--sl-color-white);
+    }
+
+    .tab-button.active {
+        background: #23262f;
+        color: #BED3FF;
+        font-weight: bold;
+        outline: 1.5px solid var(--sl-color-gray-5);
+    }
+</style>
+
+<script>
+    type TabType = "baoyan" | "kaoyan";
+
+    const tabButtons = document.querySelectorAll(".tab-button");
+    const sidebarItems = document.querySelectorAll(
+        ".sl-sidebar-nav > :not(.nav-tabs)",
+    );
+
+    const tabContent: Record<TabType, string[]> = {
+        baoyan: ["关于我们", "FAQ", "贡献指南", "保研指南"],
+        kaoyan: ["考研指南"],
+    };
+
+    function updateSidebar(tab: TabType) {
+        const showItems = tabContent[tab];
+        sidebarItems.forEach((item: Element) => {
+            const label = item.querySelector(".sl-flex")?.textContent?.trim();
+            if (label) {
+                
+            }
+        });
+    }
+
+    tabButtons.forEach((button) => {
+        // 鼠标悬停
+        button.addEventListener("mouseenter", () => {
+            if (!button.classList.contains('active')) {
+                const iconImg = button.querySelector('.icon img') as HTMLImageElement;
+                if (iconImg && iconImg.src.includes('_Gray.svg')) {
+                    iconImg.src = iconImg.src.replace('_Gray.svg', '_White.svg');
+                }
+            }
+        });
+
+        // 鼠标离开
+        button.addEventListener("mouseleave", () => {
+            if (!button.classList.contains('active')) {
+                const iconImg = button.querySelector('.icon img') as HTMLImageElement;
+                if (iconImg && iconImg.src.includes('_White.svg')) {
+                    iconImg.src = iconImg.src.replace('_White.svg', '_Gray.svg');
+                }
+            }
+        });
+
+        // 鼠标点击
+        button.addEventListener("click", () => {
+            // 先处理所有按钮
+            tabButtons.forEach((btn) => {
+                btn.classList.remove("active");
+                const btnImg = btn.querySelector('.icon img') as HTMLImageElement;
+                if (btnImg) {
+                    // 确保转换回灰色图标
+                    btnImg.src = btnImg.src
+                        .replace('_Blue.svg', '_Gray.svg')
+                        .replace('_White.svg', '_Gray.svg');
+                }
+            });
+
+            button.classList.add("active");
+            const iconImg = button.querySelector('.icon img') as HTMLImageElement;
+            if (iconImg) {
+                iconImg.src = iconImg.src.replace('_Gray.svg', '_Blue.svg');
+            }
+
+            const tab = button.getAttribute("data-tab") as TabType;
+            if (tab) {
+                updateSidebar(tab);
+            }
+        });
+    });
+
+    // 初始显示保研内容
+    updateSidebar("baoyan");
+</script>
