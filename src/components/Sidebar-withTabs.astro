@@ -8,37 +8,37 @@ const { sidebar } = Astro.props;
 
 <div class="sl-sidebar-nav">
     <div class="nav-tabs">
-        <button class="tab-button active" data-tab="Icon_Rocket">
+        <button class="tab-button active" data-tab="Begin">
             <span class="icon">
                 <img src="/Icons/Icon_Rocket_Blue.svg" alt="开始图标"/>
             </span>
             <span>写在前面</span>
         </button>
-        <button class="tab-button" data-tab="Icon_Book">
+        <button class="tab-button" data-tab="Baoyan">
             <span class="icon">
                 <img src="/Icons/Icon_Book_Gray.svg" alt="保研图标"/>
             </span>
             <span>保研</span>
         </button>
-        <button class="tab-button" data-tab="Icon_Hat">
+        <button class="tab-button" data-tab="Kaoyan">
             <span class="icon">
                 <img src="/Icons/Icon_Hat_Gray.svg" alt="考研图标"/>
             </span>
             <span>考研</span>
         </button>
-        <button class="tab-button" data-tab="Icon_People">
+        <button class="tab-button" data-tab="Kaogong">
             <span class="icon">
                 <img src="/Icons/Icon_People_Gray.svg" alt="考公图标"/>
             </span>
             <span>考公</span>
         </button>
-        <button class="tab-button" data-tab="Icon_Plane">
+        <button class="tab-button" data-tab="Chuguo">
             <span class="icon">
                 <img src="/Icons/Icon_Plane_Gray.svg" alt="出国图标"/>
             </span>
             <span>出国</span>
         </button>
-        <button class="tab-button" data-tab="Icon_Work">
+        <button class="tab-button" data-tab="Jiuye">
             <span class="icon">
                 <img src="/Icons/Icon_Work_Gray.svg" alt="就业图标"/>
             </span>
@@ -94,53 +94,128 @@ const { sidebar } = Astro.props;
         font-weight: bold;
         outline: 1.5px solid var(--sl-color-gray-5);
     }
+
 </style>
 
 <script>
-    [
-        "/Icons/Icon_Rocket_Gray.svg",
-        "/Icons/Icon_Rocket_White.svg",
-        "/Icons/Icon_Rocket_Blue.svg",
-        "/Icons/Icon_Book_Gray.svg",
-        "/Icons/Icon_Book_White.svg",
-        "/Icons/Icon_Book_Blue.svg",
-        "/Icons/Icon_Hat_Gray.svg",
-        "/Icons/Icon_Hat_White.svg",
-        "/Icons/Icon_Hat_Blue.svg",
-        "/Icons/Icon_People_Gray.svg",
-        "/Icons/Icon_People_White.svg",
-        "/Icons/Icon_People_Blue.svg",
-        "/Icons/Icon_Plane_Gray.svg",
-        "/Icons/Icon_Plane_White.svg",
-        "/Icons/Icon_Plane_Blue.svg",
-        "/Icons/Icon_Work_Gray.svg",
-        "/Icons/Icon_Work_White.svg",
-        "/Icons/Icon_Work_Blue.svg"
-    ].forEach(src => {
-        const img = new window.Image();
-        img.src = src;
-    });
-
-    type TabType = "baoyan" | "kaoyan";
+    type TabType = "Begin" | "Baoyan" | "Kaoyan" | "Kaogong" | "Chuguo" | "Jiuye";
 
     const tabButtons = document.querySelectorAll(".tab-button");
-    const sidebarItems = document.querySelectorAll(
-        ".sl-sidebar-nav > :not(.nav-tabs)",
-    );
 
-    const tabContent: Record<TabType, string[]> = {
-        baoyan: ["关于我们", "FAQ", "贡献指南", "保研指南"],
-        kaoyan: ["考研指南"],
-    };
+    /*
+        Begin: 写在前面，FAQ，贡献指南
+        beginItems: 直接打上id的元素
+        begin_sonItems: 有子目录，不能直接给要隐藏的打id，只能给son打
+        begin_liAncestor: 通过son往上找2级li就是要隐藏的元素
+    */
+    var beginItems, begin_sonItems, begin_liAncestor, Begin_group;
+    var baoyanItems, baoyan_sonItems, baoyan_liAncestor, Baoyan_group;
+    var kaoyanItems, kaoyan_sonItems, kaoyan_liAncestor, Kaoyan_group;
+
+    initSidebar();
+    
+    // 初始显示Begin内容
+    updateSidebar("Begin");
+
+    // ---------------------------------------functions below---------------------------------------
+
+    function initSidebar() {
+        [
+            "/Icons/Icon_Rocket_Gray.svg",
+            "/Icons/Icon_Rocket_White.svg",
+            "/Icons/Icon_Rocket_Blue.svg",
+            "/Icons/Icon_Book_Gray.svg",
+            "/Icons/Icon_Book_White.svg",
+            "/Icons/Icon_Book_Blue.svg",
+            "/Icons/Icon_Hat_Gray.svg",
+            "/Icons/Icon_Hat_White.svg",
+            "/Icons/Icon_Hat_Blue.svg",
+            "/Icons/Icon_People_Gray.svg",
+            "/Icons/Icon_People_White.svg",
+            "/Icons/Icon_People_Blue.svg",
+            "/Icons/Icon_Plane_Gray.svg",
+            "/Icons/Icon_Plane_White.svg",
+            "/Icons/Icon_Plane_Blue.svg",
+            "/Icons/Icon_Work_Gray.svg",
+            "/Icons/Icon_Work_White.svg",
+            "/Icons/Icon_Work_Blue.svg"
+        ].forEach(src => {
+            const img = new window.Image();
+            img.src = src;
+        });
+
+        beginItems = document.querySelectorAll('[id="sidebar_begin"]');
+        begin_sonItems = document.querySelectorAll('[id="sidebar_begin_son"]');
+        begin_liAncestor = begin_sonItems[0]?.closest('li')?.parentElement?.closest('li');
+
+        Begin_group = [];
+        Begin_group.push(begin_liAncestor);
+        beginItems.forEach((item) => {
+            const liAncestor = item.parentElement;
+            Begin_group.push(liAncestor);
+        });
+
+        baoyan_sonItems = document.querySelectorAll('[id="sidebar_baoyan_son"]');
+        baoyan_liAncestor = baoyan_sonItems[0]?.closest('li')?.parentElement?.closest('li');
+        Baoyan_group = [];
+        Baoyan_group.push(baoyan_liAncestor);
+
+        kaoyan_sonItems = document.querySelectorAll('[id="sidebar_kaoyan_son"]');
+        kaoyan_liAncestor = kaoyan_sonItems[0]?.closest('li')?.parentElement?.closest('li')?.parentElement?.closest('li');
+        Kaoyan_group = [];
+        Kaoyan_group.push(kaoyan_liAncestor);
+    }
+
+    function setGroupDisplay(group: (HTMLLIElement | null | undefined)[], isShow: boolean) {
+        if (isShow) {
+            group.forEach((item) => {
+                (item as HTMLElement).style.display = 'block';
+            });
+        }
+        else {
+            group.forEach((item) => {
+                (item as HTMLElement).style.display = 'none';
+            });
+        }
+    }
 
     function updateSidebar(tab: TabType) {
-        const showItems = tabContent[tab];
-        sidebarItems.forEach((item: Element) => {
-            const label = item.querySelector(".sl-flex")?.textContent?.trim();
-            if (label) {
-                
-            }
+        const beginItems = document.querySelectorAll('[id="sidebar_begin"]');
+        const begin_sonItems = document.querySelectorAll('[id="sidebar_begin_son"]');
+        const begin_liAncestor = begin_sonItems[0]?.closest('li')?.parentElement?.closest('li');
+
+        const Begin_group = [];
+        Begin_group.push(begin_liAncestor);
+        beginItems.forEach((item) => {
+            const liAncestor = item.parentElement;
+            Begin_group.push(liAncestor);
         });
+
+        const baoyan_sonItems = document.querySelectorAll('[id="sidebar_baoyan_son"]');
+        const baoyan_liAncestor = baoyan_sonItems[0]?.closest('li')?.parentElement?.closest('li');
+        const Baoyan_group = [];
+        Baoyan_group.push(baoyan_liAncestor);
+
+        const kaoyan_sonItems = document.querySelectorAll('[id="sidebar_kaoyan_son"]');
+        const kaoyan_liAncestor = kaoyan_sonItems[0]?.closest('li')?.parentElement?.closest('li')?.parentElement?.closest('li');
+        const Kaoyan_group = [];
+        Kaoyan_group.push(kaoyan_liAncestor);
+
+        if (tab == "Begin") {
+            setGroupDisplay(Begin_group, true);
+            setGroupDisplay(Baoyan_group, false);
+            setGroupDisplay(Kaoyan_group, false);
+        }
+        else if (tab == "Baoyan") {
+            setGroupDisplay(Begin_group, false);
+            setGroupDisplay(Baoyan_group, true);
+            setGroupDisplay(Kaoyan_group, false);
+        }
+        else if (tab == "Kaoyan") {
+            setGroupDisplay(Begin_group, false);
+            setGroupDisplay(Baoyan_group, false);
+            setGroupDisplay(Kaoyan_group, true);
+        }
     }
 
     tabButtons.forEach((button) => {
@@ -189,6 +264,4 @@ const { sidebar } = Astro.props;
         });
     });
 
-    // 初始显示保研内容
-    updateSidebar("baoyan");
 </script>

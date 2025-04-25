@@ -6,15 +6,17 @@ const Sidebar = [
     {
         label: '关于我们',
         slug: '关于我们',
+        attrs: { id: 'sidebar_begin' }
     },
     {
         label: 'FAQ',
         slug: '快问快答',
+        attrs: { id: 'sidebar_begin' }
     },
     {
         label: '贡献指南',
         items: [
-            { label: '基本配置与部署', slug: '贡献指南/基本配置' },
+            { label: '基本配置与部署', slug: '贡献指南/基本配置', attrs: { id: 'sidebar_begin_son' } },
             { label: '撰写文档', slug: '贡献指南/撰写文档' },
             { label: '提交 Pull Request', slug: '贡献指南/提交贡献' },
             { label: '提交 Issue', slug: '贡献指南/提交需求' },
@@ -24,7 +26,7 @@ const Sidebar = [
     {
         label: '保研指南',
         items: [
-            { label: '基础概念', slug: '保研指南/基础概念' },
+            { label: '基础概念', slug: '保研指南/基础概念', attrs: { id: 'sidebar_baoyan_son' } },
             { label: '保研黑话', slug: '保研指南/保研黑话' },
             { label: '保研时刻表', slug: '保研指南/保研时刻表' },
             { label: '素养掌握', slug: '保研指南/素养掌握' },
@@ -55,7 +57,7 @@ const Sidebar = [
             {
                 label: '考研经验贴',
                 items: [
-                    { label: '总览', slug: '考研指南/考研经验贴/总览' },
+                    { label: '总览', slug: '考研指南/考研经验贴/总览', attrs: { id: 'sidebar_kaoyan_son' } },
                 ]
             },
         ]
