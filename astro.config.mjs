@@ -71,7 +71,6 @@ export default defineConfig({
     integrations: [
         starlight({
             components: {
-                // 重写默认的 `SocialIcons` 组件。
                 Footer: './src/components/Footer.astro',
                 Sidebar: './src/components/Sidebar-withTabs.astro',
             },

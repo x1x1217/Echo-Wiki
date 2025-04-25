@@ -294,11 +294,13 @@ const { sidebar } = Astro.props;
 
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const iconImg = document.querySelector('[id="icon_begin"]') as HTMLImageElement;
-        if (currentTheme === 'light') {
-            iconImg.src = "/Icons/Icon_Rocket_DarkBlue.svg";
-        }
-        else {
-            iconImg.src = "/Icons/Icon_Rocket_Blue.svg";
+        if (iconImg) {
+            if (currentTheme === 'light') {
+                iconImg.src = iconImg.src.replace('_Gray.svg', '_DarkBlue.svg');
+            }
+            else {
+                iconImg.src = iconImg.src.replace('_Gray.svg', '_Blue.svg');
+            }
         }
 
         beginItems = document.querySelectorAll('[id="sidebar_begin"]');
@@ -326,11 +328,13 @@ const { sidebar } = Astro.props;
     function setGroupDisplay(group: (HTMLLIElement | null | undefined)[], isShow: boolean) {
         if (isShow) {
             group.forEach((item) => {
+                if (item == null) return;
                 (item as HTMLElement).style.display = 'block';
             });
         }
         else {
             group.forEach((item) => {
+                if (item == null) return;
                 (item as HTMLElement).style.display = 'none';
             });
         }
