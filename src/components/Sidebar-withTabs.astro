@@ -95,6 +95,18 @@ const { sidebar } = Astro.props;
         outline: 1.5px solid var(--sl-color-gray-5);
     }
 
+    :global(.sl-sidebar-nav [aria-current]),
+    :global(.sl-sidebar-nav [aria-current]:hover) {
+        background: #B3C7FF !important;
+        color: black !important;  
+        font-weight: bold !important;
+    }
+
+    :global(.sl-sidebar-nav a:hover) {
+        background-color: var(--sl-color-gray-6);
+        color: var(--sl-color-white);
+    }
+
 </style>
 
 <script>
@@ -119,6 +131,64 @@ const { sidebar } = Astro.props;
     
     // 监听 URL 变化
     window.addEventListener('popstate', initTabFromURL);
+    
+    document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const link = target.closest('a');
+        
+        // 只处理侧边栏内的链接点击
+        if (link && link.closest('.sl-sidebar-nav')) {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            
+            if (href) {
+                // 更新 URL，但不刷新页面
+                window.history.pushState({}, '', href);
+
+                document.querySelectorAll('.sl-sidebar-nav a').forEach(a => {
+                    if (a.getAttribute('href') === href) {
+                        a.setAttribute('aria-current', 'page');
+                    } else {
+                        a.removeAttribute('aria-current');
+                    }
+                });
+                
+                // 获取新页面内容
+                fetch(href)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        
+                        // 找到右侧内容区域
+                        const newContent = doc.querySelector('.lg\\:sl-flex.astro-67yu43on');
+                        const currentContent = document.querySelector('.lg\\:sl-flex.astro-67yu43on') as HTMLElement;
+                        
+                        if (newContent && currentContent) {
+                            // 添加过渡效果
+                            currentContent.style.opacity = '0';
+                            
+                            setTimeout(() => {
+                                currentContent.innerHTML = newContent.innerHTML;
+                                currentContent.style.opacity = '1';
+                                
+                                // 更新页面标题
+                                const newTitle = doc.querySelector('title');
+                                if (newTitle) {
+                                    document.title = newTitle.textContent || '';
+                                }
+                                
+                                // 更新侧边栏状态
+                                initTabFromURL();
+                            }, 300);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('加载页面内容失败:', error);
+                    });
+            }
+        }
+    });
 
     // ---------------------------------------functions below---------------------------------------
 
@@ -272,7 +342,6 @@ const { sidebar } = Astro.props;
 
     function initTabFromURL() {
         const path = decodeURIComponent(window.location.pathname);;
-        console.log(path);
         let targetTab: TabType = "Begin";
 
         if (path.includes('/写在前面') || path.includes('/快问快答') || path.includes('/贡献指南')) {
