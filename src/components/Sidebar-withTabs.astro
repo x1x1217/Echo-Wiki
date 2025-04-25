@@ -10,7 +10,7 @@ const { sidebar } = Astro.props;
     <div class="nav-tabs">
         <button class="tab-button active" data-tab="Begin">
             <span class="icon">
-                <img src="/Icons/Icon_Rocket_Blue.svg" alt="开始图标"/>
+                <img id="icon_begin" src="/Icons/Icon_Rocket_Blue.svg" alt="开始图标"/>
             </span>
             <span>写在前面</span>
         </button>
@@ -103,6 +103,66 @@ const { sidebar } = Astro.props;
     }
 
     :global(.sl-sidebar-nav a:hover) {
+        background-color: rgba(182, 179, 179, 0.427);
+        color: var(--sl-color-white);
+    }
+
+    /* -------------------------------------light mode------------------------------ */
+
+    :root[data-theme='light'] .nav-tabs {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 0.3rem;
+        border-bottom: 1px solid var(--sl-color-gray-5);
+        border: 1.5px solid var(--sl-color-gray-5);
+        border-radius: 0.75rem;
+        background-color: #F6F7F9;
+        margin-bottom: 1.5rem;
+    }
+
+    :root[data-theme='light'] .tab-button {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: none;
+        color: #555962;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.2s;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: border 0.2s;
+        display: flex;
+        gap: 0.7rem;
+    }
+
+    :root[data-theme='light'] .icon {
+        display: flex;
+        align-items: center;
+    }
+
+    :root[data-theme='light'] .tab-button:hover {
+        background: #EDEEF3;
+        color: var(--sl-color-white);
+    }
+
+    :root[data-theme='light'] .tab-button.active {
+        background: white;
+        color: #18191A;
+        font-weight: bold;
+        outline: 1.5px solid var(--sl-color-gray-5);
+    }
+
+    :root[data-theme='light'] :global(.sl-sidebar-nav [aria-current]),
+    :root[data-theme='light'] :global(.sl-sidebar-nav [aria-current]:hover) {
+        background: #3D50F5 !important;
+        color: white !important;  
+        font-weight: bold !important;
+    }
+
+    :root[data-theme='light']:global(.sl-sidebar-nav a:hover) {
         background-color: var(--sl-color-gray-6);
         color: var(--sl-color-white);
     }
@@ -197,21 +257,33 @@ const { sidebar } = Astro.props;
             "/Icons/Icon_Rocket_Gray.svg",
             "/Icons/Icon_Rocket_White.svg",
             "/Icons/Icon_Rocket_Blue.svg",
+            "/Icons/Icon_Rocket_Black.svg",
+            "/Icons/Icon_Rocket_DarkBlue.svg",
             "/Icons/Icon_Book_Gray.svg",
             "/Icons/Icon_Book_White.svg",
             "/Icons/Icon_Book_Blue.svg",
+            "/Icons/Icon_Book_Black.svg",
+            "/Icons/Icon_Book_DarkBlue.svg",
             "/Icons/Icon_Hat_Gray.svg",
             "/Icons/Icon_Hat_White.svg",
             "/Icons/Icon_Hat_Blue.svg",
+            "/Icons/Icon_Hat_Black.svg",
+            "/Icons/Icon_Hat_DarkBlue.svg",
             "/Icons/Icon_People_Gray.svg",
             "/Icons/Icon_People_White.svg",
             "/Icons/Icon_People_Blue.svg",
+            "/Icons/Icon_People_Black.svg",
+            "/Icons/Icon_People_DarkBlue.svg",
             "/Icons/Icon_Plane_Gray.svg",
             "/Icons/Icon_Plane_White.svg",
             "/Icons/Icon_Plane_Blue.svg",
+            "/Icons/Icon_Plane_Black.svg",
+            "/Icons/Icon_Plane_DarkBlue.svg",
             "/Icons/Icon_Work_Gray.svg",
             "/Icons/Icon_Work_White.svg",
-            "/Icons/Icon_Work_Blue.svg"
+            "/Icons/Icon_Work_Blue.svg",
+            "/Icons/Icon_Work_Black.svg",
+            "/Icons/Icon_Work_DarkBlue.svg"
         ].forEach(src => {
             const img = new window.Image();
             img.src = src;
@@ -219,6 +291,15 @@ const { sidebar } = Astro.props;
 
         // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', initTabFromURL);
+
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const iconImg = document.querySelector('[id="icon_begin"]') as HTMLImageElement;
+        if (currentTheme === 'light') {
+            iconImg.src = "/Icons/Icon_Rocket_DarkBlue.svg";
+        }
+        else {
+            iconImg.src = "/Icons/Icon_Rocket_Blue.svg";
+        }
 
         beginItems = document.querySelectorAll('[id="sidebar_begin"]');
         begin_sonItems = document.querySelectorAll('[id="sidebar_begin_son"]');
@@ -298,9 +379,15 @@ const { sidebar } = Astro.props;
         // 鼠标悬停
         button.addEventListener("mouseenter", () => {
             if (!button.classList.contains('active')) {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
                 const iconImg = button.querySelector('.icon img') as HTMLImageElement;
                 if (iconImg && iconImg.src.includes('_Gray.svg')) {
-                    iconImg.src = iconImg.src.replace('_Gray.svg', '_White.svg');
+                    if (currentTheme === 'light') {
+                        iconImg.src = iconImg.src.replace('_Gray.svg', '_Black.svg');
+                    }
+                    else {
+                        iconImg.src = iconImg.src.replace('_Gray.svg', '_White.svg');
+                    }
                 }
             }
         });
@@ -308,29 +395,52 @@ const { sidebar } = Astro.props;
         // 鼠标离开
         button.addEventListener("mouseleave", () => {
             if (!button.classList.contains('active')) {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                console.log(currentTheme);
                 const iconImg = button.querySelector('.icon img') as HTMLImageElement;
-                if (iconImg && iconImg.src.includes('_White.svg')) {
-                    iconImg.src = iconImg.src.replace('_White.svg', '_Gray.svg');
+                if (iconImg && (iconImg.src.includes('_White.svg') || iconImg.src.includes('_Black.svg'))) {
+                    if (currentTheme == 'light') {
+                        console.log(iconImg.src);
+                        iconImg.src = iconImg.src.replace('_Black.svg', '_Gray.svg');
+                    }
+                    else {
+                        console.log(iconImg.src);
+                        iconImg.src = iconImg.src.replace('_White.svg', '_Gray.svg');
+                    }
                 }
             }
         });
 
         // 鼠标点击
         button.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
             tabButtons.forEach((btn) => {
                 btn.classList.remove("active");
                 const btnImg = btn.querySelector('.icon img') as HTMLImageElement;
                 if (btnImg) {
-                    btnImg.src = btnImg.src
+                    if (currentTheme === 'light') {
+                        btnImg.src = btnImg.src
+                        .replace('_DarkBlue.svg', '_Gray.svg')
+                        .replace('_Black.svg', '_Gray.svg');
+                    }
+                    else {
+                        btnImg.src = btnImg.src
                         .replace('_Blue.svg', '_Gray.svg')
                         .replace('_White.svg', '_Gray.svg');
+                    }
+                    
                 }
             });
 
             button.classList.add("active");
             const iconImg = button.querySelector('.icon img') as HTMLImageElement;
             if (iconImg) {
-                iconImg.src = iconImg.src.replace('_Gray.svg', '_Blue.svg');
+                if (currentTheme === 'light') {
+                    iconImg.src = iconImg.src.replace('_Gray.svg', '_DarkBlue.svg');
+                }
+                else {
+                    iconImg.src = iconImg.src.replace('_Gray.svg', '_Blue.svg');
+                }
             }
 
             const tab = button.getAttribute("data-tab") as TabType;
@@ -341,7 +451,7 @@ const { sidebar } = Astro.props;
     });
 
     function initTabFromURL() {
-        const path = decodeURIComponent(window.location.pathname);;
+        const path = decodeURIComponent(window.location.pathname);
         let targetTab: TabType = "Begin";
 
         if (path.includes('/写在前面') || path.includes('/快问快答') || path.includes('/贡献指南')) {
@@ -366,8 +476,49 @@ const { sidebar } = Astro.props;
         // 找到对应的按钮并触发点击
         const targetButton = document.querySelector(`[data-tab="${targetTab}"]`);
         if (targetButton) {
+            
             (targetButton as HTMLButtonElement).click();
         }
     }
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'data-theme') {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                
+                // 更新所有按钮的图标
+                tabButtons.forEach((button) => {
+                    const iconImg = button.querySelector('.icon img') as HTMLImageElement;
+                    if (iconImg) {
+                        if (button.classList.contains('active')) {
+                            // 更新激活状态的按钮
+                            if (currentTheme === 'light') {
+                                iconImg.src = iconImg.src
+                                    .replace('_Blue.svg', '_DarkBlue.svg')
+                                    .replace('_White.svg', '_DarkBlue.svg');
+                            } else {
+                                iconImg.src = iconImg.src
+                                    .replace('_DarkBlue.svg', '_Blue.svg')
+                                    .replace('_Black.svg', '_Blue.svg');
+                            }
+                        } else {
+                            // 更新非激活状态的按钮
+                            iconImg.src = iconImg.src
+                                .replace('_White.svg', '_Gray.svg')
+                                .replace('_Black.svg', '_Gray.svg')
+                                .replace('_Blue.svg', '_Gray.svg')
+                                .replace('_DarkBlue.svg', '_Gray.svg');
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+    
 
 </script>
