@@ -10,55 +10,37 @@ const { sidebar } = Astro.props;
     <div class="nav-tabs">
         <button class="tab-button active" data-tab="Icon_Rocket">
             <span class="icon">
-                <Image
-                    src={import("../assets/Icons/Icon_Rocket_Blue.svg")}
-                    alt="开始图标"
-                />
+                <img src="/Icons/Icon_Rocket_Blue.svg" alt="开始图标"/>
             </span>
             <span>写在前面</span>
         </button>
         <button class="tab-button" data-tab="Icon_Book">
             <span class="icon">
-                <Image
-                    src={import("../assets/Icons/Icon_Book_Gray.svg")}
-                    alt="保研图标"
-                />
+                <img src="/Icons/Icon_Book_Gray.svg" alt="保研图标"/>
             </span>
             <span>保研</span>
         </button>
         <button class="tab-button" data-tab="Icon_Hat">
             <span class="icon">
-                <Image
-                    src={import("../assets/Icons/Icon_Hat_Gray.svg")}
-                    alt="考研图标"
-                />
+                <img src="/Icons/Icon_Hat_Gray.svg" alt="考研图标"/>
             </span>
             <span>考研</span>
         </button>
         <button class="tab-button" data-tab="Icon_People">
             <span class="icon">
-                <Image
-                    src={import("../assets/Icons/Icon_People_Gray.svg")}
-                    alt="考公图标"
-                />
+                <img src="/Icons/Icon_People_Gray.svg" alt="考公图标"/>
             </span>
             <span>考公</span>
         </button>
         <button class="tab-button" data-tab="Icon_Plane">
             <span class="icon">
-                <Image
-                    src={import("../assets/Icons/Icon_Plane_Gray.svg")}
-                    alt="出国图标"
-                />
+                <img src="/Icons/Icon_Plane_Gray.svg" alt="出国图标"/>
             </span>
             <span>出国</span>
         </button>
         <button class="tab-button" data-tab="Icon_Work">
             <span class="icon">
-                <Image
-                    src={import("../assets/Icons/Icon_Work_Gray.svg")}
-                    alt="就业图标"
-                />
+                <img src="/Icons/Icon_Work_Gray.svg" alt="就业图标"/>
             </span>
             <span>就业</span>
         </button>
@@ -115,6 +97,28 @@ const { sidebar } = Astro.props;
 </style>
 
 <script>
+    [
+        "/Icons/Icon_Rocket_Blue.svg",
+        "/Icons/Icon_Book_Gray.svg",
+        "/Icons/Icon_Book_White.svg",
+        "/Icons/Icon_Book_Blue.svg",
+        "/Icons/Icon_Hat_Gray.svg",
+        "/Icons/Icon_Hat_White.svg",
+        "/Icons/Icon_Hat_Blue.svg",
+        "/Icons/Icon_People_Gray.svg",
+        "/Icons/Icon_People_White.svg",
+        "/Icons/Icon_People_Blue.svg",
+        "/Icons/Icon_Plane_Gray.svg",
+        "/Icons/Icon_Plane_White.svg",
+        "/Icons/Icon_Plane_Blue.svg",
+        "/Icons/Icon_Work_Gray.svg",
+        "/Icons/Icon_Work_White.svg",
+        "/Icons/Icon_Work_Blue.svg"
+    ].forEach(src => {
+        const img = new window.Image();
+        img.src = src;
+    });
+
     type TabType = "baoyan" | "kaoyan";
 
     const tabButtons = document.querySelectorAll(".tab-button");
@@ -160,12 +164,10 @@ const { sidebar } = Astro.props;
 
         // 鼠标点击
         button.addEventListener("click", () => {
-            // 先处理所有按钮
             tabButtons.forEach((btn) => {
                 btn.classList.remove("active");
                 const btnImg = btn.querySelector('.icon img') as HTMLImageElement;
                 if (btnImg) {
-                    // 确保转换回灰色图标
                     btnImg.src = btnImg.src
                         .replace('_Blue.svg', '_Gray.svg')
                         .replace('_White.svg', '_Gray.svg');
