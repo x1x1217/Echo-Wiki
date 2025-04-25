@@ -116,6 +116,9 @@ const { sidebar } = Astro.props;
     
     // 初始显示Begin内容
     updateSidebar("Begin");
+    
+    // 监听 URL 变化
+    window.addEventListener('popstate', initTabFromURL);
 
     // ---------------------------------------functions below---------------------------------------
 
@@ -143,6 +146,9 @@ const { sidebar } = Astro.props;
             const img = new window.Image();
             img.src = src;
         });
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', initTabFromURL);
 
         beginItems = document.querySelectorAll('[id="sidebar_begin"]');
         begin_sonItems = document.querySelectorAll('[id="sidebar_begin_son"]');
@@ -263,5 +269,36 @@ const { sidebar } = Astro.props;
             }
         });
     });
+
+    function initTabFromURL() {
+        const path = decodeURIComponent(window.location.pathname);;
+        console.log(path);
+        let targetTab: TabType = "Begin";
+
+        if (path.includes('/写在前面') || path.includes('/快问快答') || path.includes('/贡献指南')) {
+            targetTab = "Begin";
+        } 
+        else if (path.includes('/保研')) {
+            targetTab = "Baoyan";
+        } 
+        else if (path.includes('/考研')) {
+            targetTab = "Kaoyan";
+        } 
+        else if (path.includes('/考公')) {
+            targetTab = "Kaogong";
+        } 
+        else if (path.includes('/出国')) {
+            targetTab = "Chuguo";
+        } 
+        else if (path.includes('/就业')) {
+            targetTab = "Jiuye";
+        }
+
+        // 找到对应的按钮并触发点击
+        const targetButton = document.querySelector(`[data-tab="${targetTab}"]`);
+        if (targetButton) {
+            (targetButton as HTMLButtonElement).click();
+        }
+    }
 
 </script>
